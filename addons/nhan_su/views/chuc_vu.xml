@@ -8,30 +8,13 @@
             <field name="arch" type="xml">
                 <form>
                     <sheet>
-                        <div class="oe_title">
-                            <h1>
-                                <field name="ma_chuc_vu" readonly="1"/>
-                            </h1>
-                        </div>
                         <group col="2">
                             <group string="Thông tin chức vụ">
+                                <field name="ma_chuc_vu" placeholder="Để trống để tự động tạo mã"/>
                                 <field name="ten_chuc_vu"/>
-                                <field name="mo_ta"/>
                             </group>
                         </group>
-                        <notebook>
-                            <page string="Danh sách nhân viên">
-                                <field name="nhan_vien_ids">
-                                    <tree>
-                                        <field name="ma_nhan_vien"/>
-                                        <field name="ho_ten"/>
-                                        <field name="phong_ban_id"/>
-                                        <field name="email"/>
-                                        <field name="so_dien_thoai"/>
-                                    </tree>
-                                </field>
-                            </page>
-                        </notebook>
+                       
                     </sheet>
                 </form>
             </field>
@@ -45,7 +28,7 @@
                 <tree>
                     <field name="ma_chuc_vu"/>
                     <field name="ten_chuc_vu"/>
-                    <field name="mo_ta"/>
+                  
                 </tree>
             </field>
         </record>
@@ -58,6 +41,7 @@
                 <search>
                     <field name="ma_chuc_vu"/>
                     <field name="ten_chuc_vu"/>
+                   
                 </search>
             </field>
         </record>

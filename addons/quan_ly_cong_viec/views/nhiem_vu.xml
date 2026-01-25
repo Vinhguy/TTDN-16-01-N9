@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Form View -->
+        <record id="view_nhiem_vu_form" model="ir.ui.view">
+            <field name="name">nhiem_vu.form</field>
+            <field name="model">nhiem_vu</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="ma_nhiem_vu" readonly="1"/>
+                            </h1>
+                        </div>
+                        <group col="2">
+                            <group string="Thông tin nhiệm vụ">
+                                <field name="ten_nhiem_vu"/>
+                                <field name="cong_viec_id" options="{'no_create': True}"/>
+                                <field name="nguoi_thuc_hien_id" options="{'no_create': True}"/>
+                                <field name="nguoi_giao_viec_id" options="{'no_create': True}"/>
+                            </group>
+                            <group string="Tiến độ và đánh giá">
+                                <field name="trang_thai"/>
+                                <field name="ti_le_hoan_thanh" widget="progressbar"/>
+                                <field name="ngay_bat_dau"/>
+                                <field name="ngay_ket_thuc"/>
+                                <field name="ngay_hoan_thanh_thuc_te"/>
+                                <field name="danh_gia"/>
+                            </group>
+                        </group>
+                        <group string="Mô tả">
+                            <field name="mo_ta" nolabel="1"/>
+                        </group>
+                        <group string="Nhận xét">
+                            <field name="nhan_xet" nolabel="1"/>
+                        </group>
+                        <notebook>
+                            <page string="Lịch sử tiến độ">
+                                <field name="tien_do_ids">
+                                    <tree>
+                                        <field name="ma_tien_do"/>
+                                        <field name="ngay_cap_nhat"/>
+                                        <field name="noi_dung"/>
+                                        <field name="ti_le_hoan_thanh" widget="progressbar"/>
+                                        <field name="nguoi_cap_nhat_id"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Tree View -->
+        <record id="view_nhiem_vu_tree" model="ir.ui.view">
+            <field name="name">nhiem_vu.tree</field>
+            <field name="model">nhiem_vu</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="ma_nhiem_vu"/>
+                    <field name="ten_nhiem_vu"/>
+                    <field name="cong_viec_id"/>
+                    <field name="nguoi_thuc_hien_id"/>
+                    <field name="trang_thai" decoration-success="trang_thai=='hoan_thanh'" decoration-danger="trang_thai=='qua_han'"/>
+                    <field name="ti_le_hoan_thanh" widget="progressbar"/>
+                    <field name="ngay_bat_dau"/>
+                    <field name="ngay_ket_thuc"/>
+                    <field name="danh_gia"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Search View -->
+        <record id="view_nhiem_vu_search" model="ir.ui.view">
+            <field name="name">nhiem_vu.search</field>
+            <field name="model">nhiem_vu</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="ma_nhiem_vu"/>
+                    <field name="ten_nhiem_vu"/>
+                    <field name="cong_viec_id"/>
+                    <field name="nguoi_thuc_hien_id"/>
+                    <filter string="Đang thực hiện" name="dang_thuc_hien" domain="[('trang_thai', '=', 'dang_thuc_hien')]"/>
+                    <filter string="Hoàn thành" name="hoan_thanh" domain="[('trang_thai', '=', 'hoan_thanh')]"/>
+                    <filter string="Quá hạn" name="qua_han" domain="[('trang_thai', '=', 'qua_han')]"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Công việc" name="group_cong_viec" context="{'group_by': 'cong_viec_id'}"/>
+                        <filter string="Người thực hiện" name="group_nguoi_thuc_hien" context="{'group_by': 'nguoi_thuc_hien_id'}"/>
+                        <filter string="Trạng thái" name="group_trang_thai" context="{'group_by': 'trang_thai'}"/>
+                        <filter string="Đánh giá" name="group_danh_gia" context="{'group_by': 'danh_gia'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <!-- Action -->
+        <record id="action_nhiem_vu" model="ir.actions.act_window">
+            <field name="name">Nhiệm vụ</field>
+            <field name="res_model">nhiem_vu</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Tạo nhiệm vụ mới
+                </p>
+            </field>
+        </record>
+    </data>
+</odoo>

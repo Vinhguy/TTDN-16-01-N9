@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Inherit Form View của nhan_vien -->
+        <record id="view_nhan_vien_form_inherit_qlcv" model="ir.ui.view">
+            <field name="name">nhan_vien.form.inherit.qlcv</field>
+            <field name="model">nhan_vien</field>
+            <field name="inherit_id" ref="nhan_su.view_nhan_vien_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//notebook" position="inside">
+                    <page string="Nhiệm vụ được giao">
+                        <group>
+                            <group>
+                                <field name="so_nhiem_vu_dang_thuc_hien" readonly="1"/>
+                            </group>
+                            <group>
+                                <field name="so_nhiem_vu_hoan_thanh" readonly="1"/>
+                            </group>
+                        </group>
+                        <field name="nhiem_vu_duoc_giao_ids" readonly="1">
+                            <tree>
+                                <field name="ma_nhiem_vu"/>
+                                <field name="ten_nhiem_vu"/>
+                                <field name="cong_viec_id"/>
+                                <field name="trang_thai" decoration-success="trang_thai=='hoan_thanh'" decoration-danger="trang_thai=='qua_han'"/>
+                                <field name="ti_le_hoan_thanh" widget="progressbar"/>
+                                <field name="ngay_bat_dau"/>
+                                <field name="ngay_ket_thuc"/>
+                            </tree>
+                        </field>
+                    </page>
+                    <page string="Dự án tham gia">
+                        <field name="du_an_tham_gia_ids" readonly="1">
+                            <tree>
+                                <field name="projects_id"/>
+                                <field name="projects_name"/>
+                                <field name="manager_name"/>
+                                <field name="status"/>
+                                <field name="progress" widget="progressbar"/>
+                                <field name="start_date"/>
+                                <field name="actual_end_date"/>
+                            </tree>
+                        </field>
+                    </page>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

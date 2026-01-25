@@ -6,16 +6,21 @@ class ChucVu(models.Model):
     _name = 'chuc_vu'
     _description = 'Chức vụ của nhân viên'
     _rec_name = 'ten_chuc_vu'
+    _sql_constraints = [
+        ('ma_chuc_vu_unique', 'UNIQUE(ma_chuc_vu)', 'Mã chức vụ phải duy nhất!')
+    ]
 
-    # Mã chức vụ - tự động tạo bằng sequence
+    # Mã chức vụ - có thể nhập thủ công hoặc tự động tạo
     ma_chuc_vu = fields.Char(
         string="Mã chức vụ",
-        readonly=True,
+        required=True,
         copy=False,
-        default=lambda self: 'Mới'
+        help="Nhập mã chức vụ hoặc để trống để tự động tạo"
     )
     ten_chuc_vu = fields.Char(string="Tên chức vụ", required=True)
-    mo_ta = fields.Text(string="Mô tả")
+
+    
+    
 
     # One2many liên kết với nhân viên - suffix _ids
     nhan_vien_ids = fields.One2many(
@@ -26,8 +31,8 @@ class ChucVu(models.Model):
 
     @api.model
     def create(self, vals):
-        """Tự động tạo mã chức vụ khi tạo mới"""
-        if vals.get('ma_chuc_vu', 'Mới') == 'Mới':
+        """Tự động tạo mã chức vụ khi không nhập mã"""
+        if not vals.get('ma_chuc_vu'):
             vals['ma_chuc_vu'] = self.env['ir.sequence'].next_by_code('chuc_vu.sequence') or 'CV001'
         return super(ChucVu, self).create(vals)
 
@@ -35,6 +40,6 @@ class ChucVu(models.Model):
         """Hiển thị tên chức vụ"""
         result = []
         for record in self:
-            name = record.ten_chuc_vu or record.ma_chuc_vu or f'Chức vụ #{record.id}'
+            name = record.ten_chuc_vu or record.ma_chuc_vu or "Chức vụ #%s" % record.id
             result.append((record.id, name))
         return result

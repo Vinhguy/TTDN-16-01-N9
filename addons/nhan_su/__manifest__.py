@@ -19,7 +19,7 @@
     'category': 'Human Resources',
     'version': '1.0',
 
-    'depends': ['base'],
+    'depends': ['base', 'web'],
 
     # Data files được load theo thứ tự
     'data': [
@@ -34,6 +34,12 @@
         'views/lich_su_lam_viec.xml',
         'views/menu.xml',
     ],
+    
+    'assets': {
+        'web.assets_backend': [
+            'nhan_su/static/src/css/nhan_vien.css',
+        ],
+    },
 
     'installable': True,
     'application': True,
