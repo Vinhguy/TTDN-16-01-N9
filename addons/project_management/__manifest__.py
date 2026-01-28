@@ -26,7 +26,6 @@
     'data': [
         'security/ir.model.access.csv',
         'data/sequence_data.xml',
-        'data/risk_cron.xml',
         'report/report_action.xml',
         'report/project_approval_report.xml',
         'views/projects.xml',
@@ -37,7 +36,6 @@
         'views/chartoftasks.xml',
         'views/cong_viec_extend.xml',
         'views/nhan_vien_extend.xml',
-        'views/risk_management.xml',
         'views/menu.xml',
     ],
 
