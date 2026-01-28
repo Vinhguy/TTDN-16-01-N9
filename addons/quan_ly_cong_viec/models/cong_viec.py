@@ -74,12 +74,35 @@ class CongViec(models.Model):
     @api.model
     def create(self, vals):
         """Tạo công việc mới"""
+        # Đồng bộ tỷ lệ hoàn thành với trạng thái khi tạo mới
+        trang_thai = vals.get('trang_thai')
+        ti_le = vals.get('ti_le_hoan_thanh')
+        # Nếu tạo mới đã chọn trạng thái hoàn thành nhưng chưa nhập % thì tự set 100%
+        if trang_thai == 'hoan_thanh' and (ti_le is None or ti_le == 0.0):
+            vals['ti_le_hoan_thanh'] = 100.0
+
         # Xử lý Mã công việc (Sequence)
         if vals.get('ma_cong_viec', 'Mới') == 'Mới':
             # Dùng 'or' để phòng trường hợp chưa có sequence thì lấy tạm CV001
             vals['ma_cong_viec'] = self.env['ir.sequence'].next_by_code('cong_viec.sequence') or 'CV001'
         
         return super(CongViec, self).create(vals)
+
+    def write(self, vals):
+        """Đồng bộ trạng thái và tỷ lệ hoàn thành khi cập nhật công việc
+
+        - Khi trạng thái được chuyển sang 'hoan_thanh' mà % đang nhỏ hơn 100 -> tự động set 100
+        - Không ép ngược lại (không tự giảm %) để tránh làm mất dữ liệu người dùng nhập tay
+        """
+        res = super(CongViec, self).write(vals)
+
+        # Chỉ xử lý khi có thay đổi trạng_thai
+        if 'trang_thai' in vals:
+            for record in self:
+                if record.trang_thai == 'hoan_thanh' and record.ti_le_hoan_thanh < 100.0:
+                    record.ti_le_hoan_thanh = 100.0
+
+        return res
 
     def name_get(self):
         """Hiển thị mã và tên công việc"""

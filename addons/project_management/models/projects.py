@@ -17,7 +17,13 @@ class Projects(models.Model):
     start_date = fields.Date("Ngày bắt đầu")
     actual_end_date = fields.Date("Ngày kết thúc thực tế")
 
-    progress = fields.Float("Tiến độ (%)", compute='_compute_progress', store=True)
+    progress = fields.Float(
+        "Tiến độ (%)",
+        compute='_compute_progress',
+        inverse='_inverse_progress',
+        store=True,
+        help="Tiến độ dự án (0-100%). Có thể nhập tay, nhưng sẽ được tính lại khi danh sách công việc thay đổi."
+    )
     status = fields.Selection(
         selection=[
             ('not_started', 'Chưa bắt đầu'),
@@ -61,6 +67,18 @@ class Projects(models.Model):
                 project.progress = total_progress / len(project.task_ids)
             else:
                 project.progress = 0.0
+
+    def _inverse_progress(self):
+        """Cho phép người dùng nhập/sửa trực tiếp tiến độ dự án trên form.
+
+        Giá trị người dùng nhập sẽ được lưu lại.
+        Khi danh sách công việc hoặc % hoàn thành công việc thay đổi,
+        hàm compute vẫn sẽ tính lại để đồng bộ theo công việc.
+        """
+        # Không cần xử lý gì thêm, Odoo sẽ tự ghi giá trị `progress`
+        # được người dùng nhập vào record.
+        for project in self:
+            project.progress = project.progress
 
 
     def name_get(self):

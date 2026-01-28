@@ -96,7 +96,7 @@
                                         <field name="ngay_bat_dau"/>
                                         <field name="ngay_ket_thuc"/>
                                         <field name="muc_do_uu_tien"/>
-                                        <field name="ti_le_hoan_thanh" widget="progressbar"/>
+                                        <field name="ti_le_hoan_thanh"/>
                                         <field name="trang_thai"
                                             decoration-muted="trang_thai == 'moi'"
                                             decoration-warning="trang_thai == 'dang_thuc_hien'"

@@ -23,7 +23,8 @@
                             <group string="Ưu tiên và trạng thái">
                                 <field name="muc_do_uu_tien"/>
                                 <field name="trang_thai"/>
-                                <field name="ti_le_hoan_thanh" widget="progressbar"/>
+                                <!-- Cho phép người dùng nhập/sửa trực tiếp % hoàn thành -->
+                                <field name="ti_le_hoan_thanh"/>
                                 <field name="gio_lam_du_kien"/>
                                 <field name="gio_lam_thuc_te"/>
                             </group>

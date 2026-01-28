@@ -4,7 +4,14 @@ class Budgets(models.Model):
     _name = 'budgets'
     _description = 'Ngân sách dự án'
 
-    budgets_id = fields.Char('Mã ngân sách', required=True)
+    # Mã ngân sách - tự động tạo bằng sequence
+    budgets_id = fields.Char(
+        string='Mã ngân sách',
+        required=True,
+        readonly=True,
+        copy=False,
+        default=lambda self: 'Mới'
+    )
     budgets_name = fields.Char(string="Tên Ngân Sách")
     projects_id = fields.Many2one('projects', string='Dự Án')
 
@@ -19,13 +26,10 @@ class Budgets(models.Model):
     budget_spent = fields.Float(string="Chi phí Thực tế", compute="_compute_budget_spent", store=True)
     budget_difference = fields.Float(string="Chênh lệch Ngân sách", compute="_compute_budget_difference", store=True)
 
-
     @api.depends('expense_ids.amount')  # Sửa lại depend field
     def _compute_budget_spent(self):
         for record in self:
             record.budget_spent = sum(record.expense_ids.mapped('amount'))
-
-
 
     @api.depends('budget_planned', 'budget_spent')
     def _compute_budget_difference(self):
@@ -33,7 +37,14 @@ class Budgets(models.Model):
         for record in self:
             record.budget_difference = record.budget_planned - record.budget_spent
 
-    
+    @api.model
+    def create(self, vals):
+        """Tự động tạo mã ngân sách khi tạo mới"""
+        if vals.get('budgets_id', 'Mới') == 'Mới':
+            # Dùng 'or' để phòng trường hợp chưa có sequence thì lấy tạm BG001
+            vals['budgets_id'] = self.env['ir.sequence'].next_by_code('budgets.sequence') or 'BG001'
+        return super(Budgets, self).create(vals)
+
     def name_get(self):
         result = []
         for record in self:
