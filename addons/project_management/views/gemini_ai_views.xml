@@ -91,11 +91,5 @@
         </field>
     </record>
     
-    <!-- Menu Item trong Settings -->
-    <menuitem 
-        id="menu_gemini_ai_settings" 
-        name="Gemini AI Settings"
-        parent="menu_root"
-        action="action_gemini_ai_provider"
-        sequence="98"/>
+    <!-- Menu đã được di chuyển sang menu.xml để tránh lỗi phụ thuộc thứ tự load -->
 </odoo>

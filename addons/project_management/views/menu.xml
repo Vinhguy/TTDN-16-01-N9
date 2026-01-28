@@ -52,5 +52,12 @@
             action="action_bieu_do_cong_viec"
         />
 
+
+        <menuitem 
+            id="menu_gemini_ai_settings" 
+            name="Gemini AI Settings"
+            parent="menu_root"
+            action="action_gemini_ai_provider"
+            sequence="98"/>
     </data>
 </odoo>
