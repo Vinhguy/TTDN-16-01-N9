@@ -14,12 +14,15 @@
         />
 
         
+        <!-- Menu "Quản lý công việc" đã được di chuyển sang module quan_ly_cong_viec -->
+        <!--
         <menuitem name="Quản lý công việc" 
             id="menu_taskss" 
             parent="menu_root" 
             sequence="2"
             action="action_taskss"
         />
+        -->
 
         <menuitem name="Ngân sách dự án" 
             id="menu_budgets" 

@@ -16,7 +16,6 @@
                         <group col="2">
                             <group string="Thông tin công việc">
                                 <field name="ten_cong_viec"/>
-                                <field name="du_an_id" options="{'no_create': True}"/>
                                 <field name="nguoi_phu_trach_id" options="{'no_create': True}"/>
                                 <field name="ngay_bat_dau"/>
                                 <field name="ngay_ket_thuc"/>
@@ -24,7 +23,7 @@
                             <group string="Ưu tiên và trạng thái">
                                 <field name="muc_do_uu_tien"/>
                                 <field name="trang_thai"/>
-                                <field name="ti_le_hoan_thanh" widget="progressbar" readonly="1"/>
+                                <field name="ti_le_hoan_thanh" widget="progressbar"/>
                                 <field name="gio_lam_du_kien"/>
                                 <field name="gio_lam_thuc_te"/>
                             </group>
@@ -35,20 +34,6 @@
                         <notebook>
                             <page string="Nhân viên thực hiện">
                                 <field name="nhan_vien_phan_cong_ids" widget="many2many_tags" options="{'no_create': True}"/>
-                            </page>
-                            <page string="Nhiệm vụ">
-                                <field name="nhiem_vu_ids">
-                                    <tree>
-                                        <field name="ma_nhiem_vu"/>
-                                        <field name="ten_nhiem_vu"/>
-                                        <field name="nguoi_thuc_hien_id"/>
-                                        <field name="trang_thai"/>
-                                        <field name="ti_le_hoan_thanh" widget="progressbar"/>
-                                        <field name="ngay_bat_dau"/>
-                                        <field name="ngay_ket_thuc"/>
-                                        <field name="danh_gia"/>
-                                    </tree>
-                                </field>
                             </page>
                         </notebook>
                     </sheet>
@@ -64,10 +49,11 @@
                 <tree>
                     <field name="ma_cong_viec"/>
                     <field name="ten_cong_viec"/>
-                    <field name="du_an_id"/>
                     <field name="nguoi_phu_trach_id"/>
+                    <field name="trang_thai" decoration-success="trang_thai=='hoan_thanh'" 
+                           decoration-warning="trang_thai=='dang_thuc_hien'" 
+                           decoration-danger="trang_thai=='tam_dung'"/>
                     <field name="muc_do_uu_tien"/>
-                    <field name="trang_thai"/>
                     <field name="ti_le_hoan_thanh" widget="progressbar"/>
                     <field name="ngay_bat_dau"/>
                     <field name="ngay_ket_thuc"/>
@@ -83,11 +69,9 @@
                 <search>
                     <field name="ma_cong_viec"/>
                     <field name="ten_cong_viec"/>
-                    <field name="du_an_id"/>
                     <filter string="Ưu tiên cao" name="uu_tien_cao" domain="[('muc_do_uu_tien', 'in', ['cao', 'khan_cap'])]"/>
                     <filter string="Đang thực hiện" name="dang_thuc_hien" domain="[('trang_thai', '=', 'dang_thuc_hien')]"/>
                     <group expand="0" string="Group By">
-                        <filter string="Dự án" name="group_du_an" context="{'group_by': 'du_an_id'}"/>
                         <filter string="Trạng thái" name="group_trang_thai" context="{'group_by': 'trang_thai'}"/>
                     </group>
                 </search>

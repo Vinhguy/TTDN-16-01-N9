@@ -19,7 +19,9 @@
     'category': 'Project Management',
     'version': '1.0',
 
-    'depends': ['base', 'nhan_su', 'project_management'],  # Phụ thuộc vào module nhan_su và project_management
+    'depends': ['base', 'nhan_su'],  # Phụ thuộc vào module nhan_su
+    # Note: project_management là soft dependency - không cần khai báo ở đây
+    # Field du_an_id trong cong_viec sẽ tự động tham chiếu đến model 'projects' nếu module project_management được cài đặt
 
     # Data files được load theo thứ tự
     'data': [
@@ -32,7 +34,6 @@
         'views/nhiem_vu.xml',
         'views/tien_do.xml',
         'views/bao_cao_hieu_qua.xml',
-        'views/nhan_vien_extend.xml',
         'views/menu.xml',
     ],
 

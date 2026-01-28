@@ -40,9 +40,6 @@ class CongViec(models.Model):
         default='moi'
     )
     
-    # Liên kết Many2one tới model projects từ project_management
-    du_an_id = fields.Many2one('projects', string='Dự án', ondelete='cascade', help='Dự án từ module Project Management')
-    
     # ============ TÍCH HỢP VỚI MODULE NHÂN SỰ ============
     # Người phụ trách công việc
     nguoi_phu_trach_id = fields.Many2one(
@@ -67,35 +64,21 @@ class CongViec(models.Model):
     gio_lam_du_kien = fields.Float(string='Giờ làm dự kiến')
     gio_lam_thuc_te = fields.Float(string='Giờ làm thực tế', default=0.0)
     
-    # Tỷ lệ hoàn thành tự động
+    # Tỷ lệ hoàn thành - người dùng nhập thủ công
     ti_le_hoan_thanh = fields.Float(
         string='Tỷ lệ hoàn thành (%)',
-        compute='_compute_ti_le_hoan_thanh',
-        store=True
+        default=0.0,
+        help='Tỷ lệ hoàn thành công việc (0-100%)'
     )
-    
-    # Liên kết One2many - suffix _ids
-    nhiem_vu_ids = fields.One2many(
-        'nhiem_vu',
-        'cong_viec_id',
-        string='Danh sách nhiệm vụ'
-    )
-    
-    @api.depends('nhiem_vu_ids.trang_thai', 'nhiem_vu_ids.ti_le_hoan_thanh')
-    def _compute_ti_le_hoan_thanh(self):
-        """Tính tỷ lệ hoàn thành từ nhiệm vụ"""
-        for record in self:
-            if record.nhiem_vu_ids:
-                total_progress = sum(record.nhiem_vu_ids.mapped('ti_le_hoan_thanh'))
-                record.ti_le_hoan_thanh = total_progress / len(record.nhiem_vu_ids)
-            else:
-                record.ti_le_hoan_thanh = 0.0
 
     @api.model
     def create(self, vals):
-        """Tự động tạo mã công việc khi tạo mới"""
+        """Tạo công việc mới"""
+        # Xử lý Mã công việc (Sequence)
         if vals.get('ma_cong_viec', 'Mới') == 'Mới':
+            # Dùng 'or' để phòng trường hợp chưa có sequence thì lấy tạm CV001
             vals['ma_cong_viec'] = self.env['ir.sequence'].next_by_code('cong_viec.sequence') or 'CV001'
+        
         return super(CongViec, self).create(vals)
 
     def name_get(self):

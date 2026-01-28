@@ -13,13 +13,17 @@
             parent="menu_root"
             sequence="1"/>
           
-        <!-- Menu Quản lý dự án sẽ sử dụng action từ project_management -->
+        <!-- Menu Quản lý dự án đã được di chuyển sang module project_management -->
+        <!-- Không thể tham chiếu trực tiếp vì tạo recursive dependency -->
+        <!-- Nếu cần, có thể truy cập qua menu của module project_management -->
+        <!--
         <menuitem name="Quản lý dự án" 
             id="menu_du_an" 
             parent="menu_quan_ly" 
             sequence="1"
             action="project_management.action_projects"
         />
+        -->
 
         <menuitem name="Quản lý công việc" 
             id="menu_cong_viec" 

@@ -6,7 +6,7 @@ class Expenses(models.Model):
 
     expenses_name = fields.Char(string="Tên Khoản Chi", required=True)
     # projects_id = fields.Many2one('projects', string="Dự án", ondelete='cascade')
-    taskss_id = fields.Many2one('taskss', string="Công việc")
+    cong_viec_id = fields.Many2one('cong_viec', string="Công việc", ondelete='cascade', help='Công việc từ module quản lý công việc')
     budgets_id = fields.Many2one('budgets', string="Ngân sách")
     amount = fields.Float(string="Số tiền", required=True)
     date = fields.Date(string="Ngày chi tiêu", required=True, default=fields.Date.today)

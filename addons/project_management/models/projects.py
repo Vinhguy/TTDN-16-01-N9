@@ -1,6 +1,5 @@
 from odoo import models, fields, api
 from odoo.exceptions import UserError
-from datetime import date, datetime
 import logging
 
 _logger = logging.getLogger(__name__)
@@ -32,7 +31,12 @@ class Projects(models.Model):
 
     ly_do_1 = fields.Text(string="Lý do hủy bỏ", help="Lý do hủy bỏ công việc")
 
-    task_ids = fields.One2many('taskss', inverse_name='projects_id', string='Công việc')
+    task_ids = fields.One2many(
+        'cong_viec', 
+        'du_an_id', 
+        string='Công việc',
+        help='Danh sách công việc thuộc dự án này (field du_an_id được thêm bởi module project_management)'
+    )
 
     # ============ TRƯỜNG XÉT DUYỆT DỰ ÁN ============
     approval_state = fields.Selection([
@@ -47,16 +51,16 @@ class Projects(models.Model):
     approval_signature = fields.Binary(string='Chữ ký phê duyệt')
     rejection_reason = fields.Text(string='Lý do từ chối') 
 
-    @api.depends('task_ids.status')
+    @api.depends('task_ids.trang_thai', 'task_ids.ti_le_hoan_thanh')
     def _compute_progress(self):
+        """Tính tiến độ dự án từ công việc (cong_viec)"""
         for project in self:
-            total_tasks = len(project.task_ids)
-            completed_tasks = len(project.task_ids.filtered(lambda task: task.status == 'completed'))
-            
-            if total_tasks > 0:
-                project.progress = (completed_tasks / total_tasks) * 100
+            if project.task_ids:
+                # Tính trung bình tỷ lệ hoàn thành của tất cả công việc
+                total_progress = sum(project.task_ids.mapped('ti_le_hoan_thanh'))
+                project.progress = total_progress / len(project.task_ids)
             else:
-                project.progress = 0
+                project.progress = 0.0
 
 
     def name_get(self):
@@ -117,15 +121,15 @@ class Projects(models.Model):
         return super(Projects, self).create(vals)
 
     def action_view_task_chart(self):
+        """Xem biểu đồ công việc - sử dụng cong_viec"""
         self.ensure_one()  # Đảm bảo phương thức chỉ xử lý một bản ghi
         return {
             'type': 'ir.actions.act_window',
-            'name': 'Biểu Đồ Công Việc Công Việc',
-            'res_model': 'taskss',
+            'name': 'Biểu Đồ Công Việc',
+            'res_model': 'cong_viec',
             'view_mode': 'graph',
-            'domain': [('projects_id', '=', self.id)],  # Lọc công việc theo dự án hiện tại
-            # Đặt giá trị mặc định cho trường projects_id
-            'context': {'search_default_group_by_projects_id': self.id},
+            'domain': [('du_an_id', '=', self.id)],  # Lọc công việc theo dự án hiện tại
+            'context': {'search_default_group_by_du_an_id': self.id},
             'target': 'current',
         }
 
@@ -178,9 +182,10 @@ class Projects(models.Model):
         
         # Tạo công việc với error handling
         created_count = 0
+        created_tasks = []
         for task in core_tasks:
             try:
-                CongViec.create({
+                new_task = CongViec.create({
                     'ten_cong_viec': task['ten'],
                     'du_an_id': self.id,
                     'muc_do_uu_tien': task['uu_tien'],
@@ -189,13 +194,13 @@ class Projects(models.Model):
                     'ngay_bat_dau': self.start_date,
                     'ngay_ket_thuc': self.actual_end_date,
                 })
+                created_tasks.append(new_task)
                 created_count += 1
             except Exception as e:
                 # Log lỗi nhưng không dừng quá trình
                 _logger.error(f"Lỗi khi tạo công việc '{task['ten']}' cho dự án {self.projects_id}: {str(e)}")
         
-        if created_count > 0:
-            _logger.info(f"Đã tạo {created_count}/{len(core_tasks)} công việc cốt lõi cho dự án {self.projects_id}")
+
 
     def action_reject(self):
         """Từ chối dự án"""

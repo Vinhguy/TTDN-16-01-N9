@@ -11,7 +11,7 @@
                             
                             <!-- <field name="projects_id"/> -->
                             <field name="budgets_id"/>
-                            <field name="taskss_id"/>
+                            <field name="cong_viec_id" options="{'no_create': True}"/>
                             <!-- <field name="expense_ids"/> -->
                             <field name="expenses_name"/>
                             <field name="amount"/>
@@ -31,7 +31,7 @@
                 <tree>
                     <!-- <field name="projects_id"/> -->
                     <field name="budgets_id"/>
-                    <field name="taskss_id"/>
+                    <field name="cong_viec_id"/>
                     <!-- <field name="expense_ids"/> -->
                     <field name="expenses_name"/>
                     <field name="amount"/>
@@ -48,7 +48,7 @@
                 <search>
                     <!-- <field name="projects_id"/> -->
                     <field name="budgets_id"/>
-                    <field name="taskss_id"/>
+                    <field name="cong_viec_id"/>
                     <!-- <field name="expense_ids"/> -->
                     <field name="expenses_name"/>
                     <field name="amount"/>

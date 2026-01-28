@@ -20,8 +20,7 @@
     'version': '0.1',
 
     # any module necessary for this one to work correctly
-    # Note: quan_ly_cong_viec is a soft dependency (checked at runtime)
-    'depends': ['base', 'nhan_su', 'mail'],
+    'depends': ['base', 'nhan_su', 'mail', 'quan_ly_cong_viec'],
 
     # always loaded
     'data': [
@@ -31,11 +30,12 @@
         'report/project_approval_report.xml',
         'views/projects.xml',
         'views/employees.xml',
-        'views/taskss.xml',
         'views/budgets.xml',
         'views/expenses.xml',
         'views/chart.xml',
         'views/chartoftasks.xml',
+        'views/cong_viec_extend.xml',
+        'views/nhan_vien_extend.xml',
         'views/menu.xml',
     ],
 
@@ -46,7 +46,7 @@
     # },
 
     # only loaded in demonstration mode
-    'demo': [
-        'demo/demo.xml',
-    ],
+    # 'demo': [
+    #     'demo/demo.xml',
+    # ],
 }
